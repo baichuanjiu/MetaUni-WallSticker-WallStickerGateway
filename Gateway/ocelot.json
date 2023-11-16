@@ -1,0 +1,142 @@
+////配置模板
+//{
+//  "Routes": [
+//    {
+//      //下游服务地址
+//      "DownstreamPathTemplate": "/api/{url}",
+//      //下游协议
+//      "DownstreamScheme": "http",
+//      //负载均衡方式
+//      "LoadBalancerOptions": {
+//        "Type": "RoundRobin" //RoundRobin 轮询 LeastConnection 最少连接数
+//      },
+
+//      //上游请求地址
+//      "UpstreamPathTemplate": "T1/{url}",
+//      //HTTP谓词
+//      "UpstreamHttpMethod": [ "GET", "POST", "DELETE", "PUT" ],
+//      //使用服务发现
+//      "UseServiceDiscovery": true,
+//      //Consul服务名称
+//      "ServiceName": "api",
+//      //缓存设置
+//      "FileCacheOptions": {
+//        "TtlSeconds": 10, //缓存时间，单位秒
+//        "Region": "CacheArea" //定义缓存区名，可以调用OcelotApi清除该缓存区
+//      },
+//      //熔断设置
+//      "QoSOptions": {
+//        "ExceptionsAllowedBeforeBreaking": 3, //阈值，当转发到下游的服务连续出现的异常次数达到阈值就会触发熔断。必须和DurationOfBreak一起设置
+//        "DurationOfBreak": 10000, //熔断持续时间，单位毫秒。必须和ExceptionsAllowedBeforeBreaking一起设置
+//        "TimeoutValue": 1000 //如果下游在限定时间内未响应则请求直接被设置为超时，单位毫秒。可以单独设置，默认为90秒
+//      },
+//      //限流设置
+//      "RateLimitOptions": {
+//        "ClientWhitelist": [], //客户端白名单，白名单不受限流规则限制
+//        "EnableRateLimiting": true, //是否启用限流
+//        "Period": "1s", //周期，单位有s(秒)、m(分)、h(时)、d(天)，比如1h
+//        "Limit": 1 //周期内允许的最大请求数量
+//        "PeriodTimespan": 1, //多少秒后客户端可以重试
+//      }
+//    }
+//  ],
+//  "GlobalConfiguration": {
+//    //Ocelot应用地址
+//    "BaseUrl": "",
+//    "ServiceDiscoveryProvider": {
+//      //Consul地址
+//      "Host": "",
+//      //Consul端口
+//      "Port": 8500,
+//      //表明由Consul提供服务发现
+//      "Type": "Consul"
+//    },
+//    //更精细的限流设置
+//    "RateLimitOptions": {
+//      "DisableRateLimitHeaders": false, //是否禁用X-Rate-Limit、Retry-After标头。
+//      "QuotaExceededMessage": "Customize Tips!", //触发限流时返回的消息
+//      "HttpStatusCode": 429, //触发限流时返回的http状态码（一般会写429）
+//      "ClientIdHeader": "client_id" //用来识别客户端的标头，默认是ClientId
+//    }
+
+//    /*
+//    tips：DisableRateLimitHeaders中提到的X-Rate-Limit、Retry-After：X-Rate-Limit——标准时间内允许多少个请求，Retry-After——触发限流以后多久可以重试。
+
+//    白名单
+//    白名单里的客户端是不会受到限流限制的。按照配置添加请求头，就可以被白名单识别：
+//    请求时添加这个请求头，无论怎么刷都不会被限流。
+//    */
+//  }
+//}
+
+
+//配置
+{
+  "Routes": [
+    {
+      //下游服务地址
+      "DownstreamPathTemplate": "/{url}",
+      //下游协议
+      "DownstreamScheme": "http",
+      //负载均衡方式
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin" //RoundRobin 轮询 LeastConnection 最少连接数
+      },
+
+      //上游请求地址
+      "UpstreamPathTemplate": "/wallSticker/stickerAPI/{url}",
+      //HTTP谓词
+      "UpstreamHttpMethod": [ "GET", "POST", "DELETE", "PUT" ],
+      //使用服务发现
+      "UseServiceDiscovery": true,
+      //Consul服务名称
+      "ServiceName": "WallSticker.Sticker.API",
+      //缓存设置
+      //"FileCacheOptions": {
+      //  "TtlSeconds": 5, //缓存时间，单位秒
+      //  "Region": "CacheArea" //定义缓存区名，可以调用OcelotApi清除该缓存区
+      //},
+      //熔断设置
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3, //阈值，当转发到下游的服务连续出现的异常次数达到阈值就会触发熔断。必须和DurationOfBreak一起设置
+        "DurationOfBreak": 10000, //熔断持续时间，单位毫秒。必须和ExceptionsAllowedBeforeBreaking一起设置
+        "TimeoutValue": 1000 //如果下游在限定时间内未响应则请求直接被设置为超时，单位毫秒。可以单独设置，默认为90秒
+      },
+      //限流设置
+      "RateLimitOptions": {
+        "ClientWhitelist": [], //客户端白名单，白名单不受限流规则限制
+        "EnableRateLimiting": true, //是否启用限流
+        "Period": "10s", //周期，单位有s(秒)、m(分)、h(时)、d(天)，比如1h
+        "Limit": 5, //周期内允许的最大请求数量
+        "PeriodTimespan": 15 //多少秒后客户端可以重试
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    //Ocelot应用地址
+    //"BaseUrl": "",
+    "ServiceDiscoveryProvider": {
+      //Consul地址
+      "Host": "host.docker.internal",
+      //Consul端口
+      "Port": 8520,
+      //表明由Consul提供服务发现
+      "Type": "Consul"
+    },
+    //更精细的限流设置
+    "RateLimitOptions": {
+      "DisableRateLimitHeaders": false, //是否禁用X-Rate-Limit、Retry-After标头。
+      "QuotaExceededMessage": "NO DDOS,PLZ.", //触发限流时返回的消息
+      "HttpStatusCode": 429, //触发限流时返回的http状态码（一般会写429）
+      "ClientIdHeader": "client_id" //用来识别客户端的标头，默认是ClientId
+    }
+
+    /*
+    tips：DisableRateLimitHeaders中提到的X-Rate-Limit、Retry-After：X-Rate-Limit——标准时间内允许多少个请求，Retry-After——触发限流以后多久可以重试。
+
+    白名单
+    白名单里的客户端是不会受到限流限制的。按照配置添加请求头，就可以被白名单识别：
+    请求时添加这个请求头，无论怎么刷都不会被限流。
+    */
+  }
+}

@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  gateway:
+    image: ${DOCKER_REGISTRY-}gateway
+    environment:
+      - TZ=Asia/Shanghai
+    build:
+      context: .
+      dockerfile: Gateway/Dockerfile
+    ports:
+      - 45552:80
+      - 45553:443
